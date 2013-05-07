@@ -9,7 +9,7 @@ function Head() {
   this.set.push(diamond);
   this.diamond = diamond;
 
-  var line = paper.path("M10,20L10,600");
+  var line = paper.path("M10,20L10,570");
   line.attr('stroke', 'rgb(232,129,61)');
   line.attr('stroke-width', 2);
   this.set.push(line);
@@ -55,6 +55,14 @@ Head.prototype = {
   },
   hoverout: function() {
     this.glow.hide();
+  },
+  animateDx: 10,
+  animate: function() {
+    this.dx  += this.animateDx;
+    if (this.x + this.dx > this.xmax || this.x + this.dx < this.xmin) {
+      this.animateDx *= -1;
+    }
+    this.update();
   }
 };
 
@@ -66,12 +74,9 @@ document.getElementById('animate').onclick = function() {
   animating = !animating;
 };
 
-var dx = 10;
 function animate() {
   requestAnimationFrame(animate); 
   if (!animating) return;
-  head.dx += dx;
-  if (head.x + head.dx > head.xmax || head.x + head.dx < head.xmin) dx *= -1;
-  head.update();
+  head.animate();
 };
 animate();
