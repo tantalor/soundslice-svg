@@ -28,6 +28,7 @@ function Head() {
   this.y0 = 10;
   this.dx = 0;
   this.xmin = 10;
+  this.xmax = 770;
   this.set.drag(this.onmove.bind(this), this.onstart.bind(this));
   
   // Hover events.
@@ -46,7 +47,7 @@ Head.prototype = {
     this.dx = 0;
   },
   update: function() {
-    var x = Math.max(this.x + this.dx, this.xmin);
+    var x = Math.min(Math.max(this.x + this.dx, this.xmin), this.xmax);
     this.set.transform('T' + x + ',' + this.y0);
   },
   hoverin: function() {
@@ -58,3 +59,19 @@ Head.prototype = {
 };
 
 var head = new Head();
+
+// Animation.
+var animating = false;
+document.getElementById('animate').onclick = function() {
+  animating = !animating;
+};
+
+var dx = 10;
+function animate() {
+  requestAnimationFrame(animate); 
+  if (!animating) return;
+  head.dx += dx;
+  if (head.x + head.dx > head.xmax || head.x + head.dx < head.xmin) dx *= -1;
+  head.update();
+};
+animate();
